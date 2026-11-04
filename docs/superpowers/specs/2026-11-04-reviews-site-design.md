@@ -138,6 +138,10 @@ The review body is free markdown below the front matter.
 | `cutout` | no | Default `true`. `false` = show the photo as-is in a rounded frame (movies posters, gaming cafés). |
 | `draft` | no | `true` = not published. |
 
+- **Obsidian syntax in the body**
+  - `[[Note]]` / `[[Note|label]]` that resolves to another *published* review becomes a link to `/r/<slug>` (and opens its card).
+  - Any other wikilink (private note, draft, missing) becomes its plain label text, with no link and no target revealed.
+  - Embeds (`![[...]]` or markdown images pointing into the vault) are a validation error naming the file. v1 has one photo per review.
 - **Published** = in `reviews/`, `draft` is not true, and `score` is filled in. Notes that aren't published are never validated beyond that check, so half-written notes never break a deploy.
 - **Slug** = the note's filename, slugified (lowercase ASCII, Vietnamese diacritics stripped, spaces → `-`). Two published notes with the same slug is an error. Renaming a note changes its URL; that is accepted in v1.
 - **Categories:** the key is `category`, trimmed, with internal spaces collapsed, compared case-insensitively. `Instant Noodles` and `instant  noodles` are one category.
@@ -200,8 +204,13 @@ The review body is free markdown below the front matter.
 - Opening the dialog locks page scroll and compensates for the scrollbar width, so nothing moves.
 - Verified in the mockup: the first pill stayed at x = 44.5 px across load, filter, open and close.
 
-**Visual system** (from approved mockup v3 = style "A · Floating, no drop shadow")
-- **Font:** DM Sans (Google Fonts, self-hosted via Astro's font handling or `@fontsource`). Weights 500/600/700. Slight negative tracking on headings.
+**Visual system** (from approved mockup v6: mockup v3's layout with the Jackwrite font = style "A · Floating, no drop shadow")
+- **Font:** Jackwrite by Jack Daw (SIL Open Font License, free for commercial use; licence file shipped in `src/fonts/`). All three styles are self-hosted as WOFF2:
+  - **Bold (700):** wordmark "sahaj", grid scores, tier letters, big card score, item titles, active pill, card title, verdict quote.
+  - **Regular (400):** pills, review body.
+  - **Thin (100):** secondary text (category under items, counts, "/ reviews", "/ 10", tier ranges, card category label, fact chips). Thin is very light, so thin text uses `#222`/`#6a6a6a`, never the tertiary grey.
+  - **No negative letter-spacing.**
+  - **Fallback stack:** `'Jackwrite', 'Courier Prime', ui-monospace, monospace`. Jackwrite only covers basic Latin (94 glyphs). Accented letters (é in "Comté"), ₫ € £, … and × fall back per glyph to Courier Prime. Vietnamese is not a requirement. UI chrome (the close button) uses ASCII or SVG only.
 - **Colours**
   - Background `#faf9f7`
   - Text `#222`
@@ -216,7 +225,7 @@ The review body is free markdown below the front matter.
 - **Non-cutout images** (`cutout: false`) sit in the same square frame as a rounded rectangle (16 px radius), filled with `object-fit: cover`.
 - **Header:** `sahaj / reviews` wordmark left, "N things, honestly scored" right. Pills are sticky under the header and scroll sideways on mobile.
 - **Card:** 32 px radius, a single soft shadow on the card only, blurred backdrop.
-- **Reference mockup:** `docs/design/mockup-v3.html` (copied into the repo with its sample images).
+- **Reference mockup:** `docs/design/mockup-v6.html` (mockup-v3 is the pre-font version) (copied into the repo with its sample images).
 
 **Meta:** each `/r/` page has a title, description (the verdict) and `og:image` (the cutout). Sitemap via `@astrojs/sitemap`.
 
