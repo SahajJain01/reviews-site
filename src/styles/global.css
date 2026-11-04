@@ -7,7 +7,7 @@
   --shadow: rgba(0,0,0,.02) 0 0 0 1px, rgba(0,0,0,.04) 0 2px 6px, rgba(0,0,0,.1) 0 4px 8px;
 }
 @view-transition { navigation: auto; }
-*, *::before, *::after { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: border-box; cursor: url('/cursor.png') 0 0, auto; }
 html { scrollbar-gutter: stable; overflow-y: scroll; }
 body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-weight: 400; -webkit-font-smoothing: antialiased; }
 a { color: inherit; }
@@ -30,7 +30,7 @@ main { max-width: 1240px; margin: 0 auto; padding: 18px 32px 120px; }
 .nothing { color: var(--ink2); padding: 60px 0; }
 
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 36px 28px; }
-.item { display: block; text-decoration: none; cursor: pointer; }
+.item { display: block; text-decoration: none; cursor: url('/cursor.png') 0 0, pointer; }
 .frame { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; padding: 14%; border-radius: 20px; }
 .frame img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; transition: transform .3s cubic-bezier(.2,.8,.2,1); }
 .frame.photo { padding: 6%; }
