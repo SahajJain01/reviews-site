@@ -5,7 +5,7 @@ import type { ImageMetadata } from 'astro';
 import { loadVault, type Review, type Category } from './reviews.ts';
 
 export const SITE = {
-  name: 'sahaj',
+  name: 'bebi',
   sub: 'reviews',
   tagline: (n: number) => `${n} thing${n === 1 ? '' : 's'}, honestly scored`,
 };
