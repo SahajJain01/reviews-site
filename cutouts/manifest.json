@@ -1,8 +1,44 @@
 {
+  "860722dbfd1a4b28-bgl": {
+    "file": "860722dbfd1a4b28-bgl.png",
+    "height": 1120,
+    "tint": "#e7e1e0",
+    "width": 574
+  },
+  "899e0f44d4a31759-bgl": {
+    "file": "899e0f44d4a31759-bgl.png",
+    "height": 1600,
+    "tint": "#ededeb",
+    "width": 749
+  },
+  "b13083d4a9eabbfe-bgl": {
+    "file": "b13083d4a9eabbfe-bgl.png",
+    "height": 1482,
+    "tint": "#f2ece5",
+    "width": 631
+  },
+  "b21e0258d43bbad6-bgl": {
+    "file": "b21e0258d43bbad6-bgl.png",
+    "height": 1490,
+    "tint": "#e7e6e2",
+    "width": 572
+  },
+  "e32c6361c33d1dd9-bgl": {
+    "file": "e32c6361c33d1dd9-bgl.png",
+    "height": 1600,
+    "tint": "#e4e2e0",
+    "width": 673
+  },
   "ed98e584ee0ba491-bgl": {
     "file": "ed98e584ee0ba491-bgl.png",
     "height": 566,
     "tint": "#f0e9db",
     "width": 240
+  },
+  "ff205da7917f441c-bgl": {
+    "file": "ff205da7917f441c-bgl.png",
+    "height": 997,
+    "tint": "#edf3db",
+    "width": 401
   }
 }
