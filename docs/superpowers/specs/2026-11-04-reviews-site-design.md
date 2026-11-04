@@ -69,9 +69,9 @@ github.com/SahajJain01/reviews-site    (public)  workflow "publish"
    1. checkout site + checkout vault into ./vault (read-only token)
    2. validate notes (fail on errors)
    3. cutout step: new photos → transparent PNG + manifest entry
-   4. commit new cutouts back to reviews-site ("[skip ci]")
-   5. astro build
-   6. wrangler pages deploy → Cloudflare Pages project "reviews"
+   4. astro build
+   5. wrangler pages deploy → Cloudflare Pages project "reviews"
+   6. commit new cutouts back to reviews-site ("[skip ci]"), only after the deploy succeeds
    ▼
 reviews.sahajjain.com
 ```
@@ -168,7 +168,7 @@ The review body is free markdown below the front matter.
   - `width`, `height`
   - `tint`: the average colour of the opaque pixels, lightened toward white. It becomes the soft background of the popup's image panel.
 - **Photos with `cutout: false`:** these are copied, not cut out. They go to `cutouts/<key>.jpg`, resized to a 1600 px long edge, with a `tint` taken from the whole image, so the site has one place to read images from.
-- **Committing:** new files are committed back to reviews-site `main` by the workflow, with `[skip ci]` in the commit message so it doesn't trigger itself. Cutouts are public anyway, because they appear on the site. The private vault photos never leave the runner.
+- **Committing:** new files are committed back to reviews-site `main` by the workflow, **only after a successful deploy** (rebase onto `main` before pushing; the concurrency lock prevents runs racing). A failed run publishes nothing, and its cutouts are simply regenerated on the next run. They are committed with `[skip ci]` in the commit message so it doesn't trigger itself. Cutouts are public anyway, because they appear on the site. The private vault photos never leave the runner.
 - **Cleanup:** cutouts for photos no longer referenced are left in place in v1. Pruning comes later.
 - **Bad cutouts:** if a cutout comes out bad, the fix is to set `cutout: false` or reshoot. There's no manual mask editing in v1.
 
@@ -179,7 +179,7 @@ The review body is free markdown below the front matter.
 **Routes**
 - `/`: "All" grid, newest first.
 - `/c/<category-slug>`: that category as tier rows.
-- `/r/<review-slug>`: a full page rendering the grid of that review's category, with the card already open. It also works with JavaScript off, as a plain page.
+- `/r/<review-slug>`: the same page as that review's `/c/<category>` (tier rows) with the card already open. It also works with JavaScript off, as a plain page. Closing the card when it was opened in-page goes back in history to where it came from. When `/r/` was the landing page (a shared link, or a refresh), closing replaces the URL with `/c/<category>`. Refreshing after opening a card from `/` therefore lands on the category view, which is accepted.
 - `categories.json`: the category list, used by the next run's "new category" warning.
 
 **Pills** are real links to `/c/...`. Astro view transitions make switching feel instant without a full-page flash. The active pill is filled near-black.
@@ -263,7 +263,9 @@ The review data (category, score, date, brand, price, place, tint) is enough for
 5. `price` stays free text in v1.
 6. Renaming a note changes its URL. No redirects in v1.
 7. Movie posters and gaming-café photos use `cutout: false`, set per note (no per-category defaults).
-8. Model: `birefnet-general-lite`, about 13 s per photo on CPU in the spike. The heavier `birefnet-general` is an option if edges look rough.
+8. `/r/` renders behind the card as the category's tier view. Closing a card you landed on directly goes to `/c/<category>`.
+9. Cutouts are committed only after a successful deploy. The public Actions log and job summary may show note filenames and field errors for *published* notes. That's accepted, because those notes are going public anyway, and drafts are never validated or named.
+10. Model: `birefnet-general-lite`, about 13 s per photo on CPU in the spike. The heavier `birefnet-general` is an option if edges look rough.
 
 ## 13. Left to the builder
 
