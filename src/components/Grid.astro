@@ -1,0 +1,7 @@
+---
+import Item from './Item.astro';
+import type { Review } from '../lib/reviews.ts';
+interface Props { reviews: Review[]; eagerCount?: number }
+const { reviews, eagerCount = 0 } = Astro.props;
+---
+<div class="grid">{reviews.map((r, i) => <Item r={r} eager={i < eagerCount} />)}</div>

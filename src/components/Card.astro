@@ -1,0 +1,29 @@
+---
+import { getImage } from 'astro:assets';
+import type { Review } from '../lib/reviews.ts';
+import { data, formatDate, scoreText } from '../lib/site.ts';
+interface Props { r: Review; closeHref: string }
+const { r, closeHref } = Astro.props;
+const shot = data().shots.get(r.slug)!;
+const img = await getImage({ src: shot.image, width: 1200, format: 'webp' });
+const facts = [r.brand, r.price, r.place, formatDate(r.date)].filter(Boolean);
+---
+<article class="card" style={`--tint:${shot.tint}`}>
+  <div class:list={['cimg', { photo: !shot.cutout }]}>
+    <a class="close" href={closeHref} aria-label="Close">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+    </a>
+    <img src={img.src} width={img.attributes.width} height={img.attributes.height} alt={r.title} decoding="async" />
+  </div>
+  <div class="cbody">
+    <div class="ccat"><a href={`/c/${r.categorySlug}/`}>{r.category}</a></div>
+    <h1 class="ctitle">{r.title}</h1>
+    <div class="crow">
+      <div class="big">{scoreText(r.score)}<small> / 10</small></div>
+      <div class:list={['tierchip', r.tier]}>{r.tier} tier</div>
+    </div>
+    <p class="verdict">“{r.verdict}”</p>
+    {r.bodyHtml && <div class="text" set:html={r.bodyHtml} />}
+    <div class="facts">{facts.map((f) => <span class="fact">{f}</span>)}</div>
+  </div>
+</article>

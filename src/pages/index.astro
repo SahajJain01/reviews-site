@@ -1,0 +1,11 @@
+---
+import Base from '../layouts/Base.astro';
+import Grid from '../components/Grid.astro';
+import Cards from '../components/Cards.astro';
+import { data } from '../lib/site.ts';
+const { reviews } = data();
+---
+<Base active="all" listUrl="/">
+  {reviews.length ? <Grid reviews={reviews} eagerCount={8} /> : <p class="nothing">Nothing reviewed yet.</p>}
+  <Cards slot="dialog" reviews={reviews} closeHref="/" />
+</Base>

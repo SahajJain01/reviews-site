@@ -1,0 +1,29 @@
+---
+import { getImage } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import TierList from '../../components/TierList.astro';
+import Card from '../../components/Card.astro';
+import { data, scoreText } from '../../lib/site.ts';
+
+export function getStaticPaths() {
+  return data().reviews.map((r) => ({ params: { slug: r.slug }, props: { slug: r.slug } }));
+}
+const { reviews, shots } = data();
+const r = reviews.find((x) => x.slug === Astro.props.slug)!;
+const siblings = reviews.filter((x) => x.categorySlug === r.categorySlug);
+const listUrl = `/c/${r.categorySlug}/`;
+const og = await getImage({ src: shots.get(r.slug)!.image, width: 1200, format: 'png' });
+---
+<Base title={r.title} description={`${scoreText(r.score)}/10 — ${r.verdict}`} ogImage={og.src} active={r.categorySlug} listUrl={listUrl} listTitle={`${r.category} tier list`}>
+  <TierList reviews={siblings} />
+  <Fragment slot="dialog">
+    {siblings.map((s) => (
+      <template data-card={s.slug} data-title={s.title}>
+        <Card r={s} closeHref={listUrl} />
+      </template>
+    ))}
+    <dialog id="card-dialog" aria-label="Review" open data-initial={r.slug}>
+      <div class="dialog-inner"><Card r={r} closeHref={listUrl} /></div>
+    </dialog>
+  </Fragment>
+</Base>

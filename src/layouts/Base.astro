@@ -1,0 +1,55 @@
+---
+import '../styles/global.css';
+import Pills from '../components/Pills.astro';
+import { data, SITE } from '../lib/site.ts';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  active: string; // 'all' or a category slug
+  listUrl: string; // where closing a card lands when there is no history
+  listTitle?: string; // page title to restore when a card closes (defaults to title)
+}
+const { title, description, ogImage, active, listUrl, listTitle } = Astro.props;
+const { reviews, categories } = data();
+const withSite = (t?: string) => (t ? `${t} · ${SITE.name} / ${SITE.sub}` : `${SITE.name} / ${SITE.sub}`);
+const fullTitle = withSite(title);
+const restoreTitle = listTitle !== undefined ? withSite(listTitle) : fullTitle;
+const desc = description ?? `Personal reviews of everyday things, scored and sorted into tier lists.`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={desc} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/fonts/jackwrite-regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/jackwrite-bold.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:url" content={canonical} />
+    {ogImage && <meta property="og:image" content={new URL(ogImage, Astro.site)} />}
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+  </head>
+  <body data-list-url={listUrl} data-list-title={restoreTitle} data-site-title={withSite()}>
+    <header class="top">
+      <a class="mark" href="/">{SITE.name} <span>/ {SITE.sub}</span></a>
+      <div class="count">{SITE.tagline(reviews.length)}</div>
+    </header>
+    <Pills categories={categories} active={active} total={reviews.length} />
+    <main>
+      <slot />
+    </main>
+    <slot name="dialog" />
+    <script src="../scripts/dialog.ts"></script>
+  </body>
+</html>

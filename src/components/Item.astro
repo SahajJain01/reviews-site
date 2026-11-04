@@ -1,0 +1,29 @@
+---
+import { getImage } from 'astro:assets';
+import type { Review } from '../lib/reviews.ts';
+import { data, scoreText } from '../lib/site.ts';
+interface Props { r: Review; eager?: boolean }
+const { r, eager = false } = Astro.props;
+const shot = data().shots.get(r.slug)!;
+const fmt = 'webp';
+const [s1, s2] = await Promise.all([
+  getImage({ src: shot.image, width: 400, format: fmt }),
+  getImage({ src: shot.image, width: 800, format: fmt }),
+]);
+---
+<a class="item" href={`/r/${r.slug}/`} data-slug={r.slug}>
+  <div class:list={['frame', { photo: !shot.cutout }]}>
+    <img
+      src={s1.src}
+      srcset={`${s1.src} 400w, ${s2.src} 800w`}
+      sizes="(max-width: 760px) 45vw, 220px"
+      width={s1.attributes.width}
+      height={s1.attributes.height}
+      alt={r.title}
+      loading={eager ? 'eager' : 'lazy'}
+      decoding="async"
+    />
+  </div>
+  <div class="meta"><div class="name">{r.title}</div><div class="score">{scoreText(r.score)}</div></div>
+  <div class="sub">{r.category}</div>
+</a>

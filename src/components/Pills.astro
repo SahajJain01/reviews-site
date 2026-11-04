@@ -1,0 +1,13 @@
+---
+import type { Category } from '../lib/reviews.ts';
+interface Props { categories: Category[]; active: string; total: number }
+const { categories, active, total } = Astro.props;
+---
+<nav class="pills" aria-label="Categories">
+  <a class:list={['pill', { on: active === 'all' }]} href="/" aria-current={active === 'all' ? 'page' : undefined}>All<small>{total}</small></a>
+  {categories.map((c) => (
+    <a class:list={['pill', { on: active === c.slug }]} href={`/c/${c.slug}/`} aria-current={active === c.slug ? 'page' : undefined}>
+      {c.name}<small>{c.count}</small>
+    </a>
+  ))}
+</nav>

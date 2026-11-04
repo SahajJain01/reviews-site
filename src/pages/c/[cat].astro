@@ -1,0 +1,17 @@
+---
+import Base from '../../layouts/Base.astro';
+import TierList from '../../components/TierList.astro';
+import Cards from '../../components/Cards.astro';
+import { data } from '../../lib/site.ts';
+
+export function getStaticPaths() {
+  return data().categories.map((c) => ({ params: { cat: c.slug }, props: { slug: c.slug, name: c.name } }));
+}
+const { slug, name } = Astro.props;
+const reviews = data().reviews.filter((r) => r.categorySlug === slug);
+const url = `/c/${slug}/`;
+---
+<Base title={`${name} tier list`} description={`My ${name.toLowerCase()} tier list: ${reviews.length} reviewed.`} active={slug} listUrl={url}>
+  <TierList reviews={reviews} />
+  <Cards slot="dialog" reviews={reviews} closeHref={url} />
+</Base>

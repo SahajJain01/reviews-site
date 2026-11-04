@@ -1,0 +1,13 @@
+---
+// Card templates for every review shown on the page, so opening one needs no request.
+import Card from './Card.astro';
+import type { Review } from '../lib/reviews.ts';
+interface Props { reviews: Review[]; closeHref: string }
+const { reviews, closeHref } = Astro.props;
+---
+{reviews.map((r) => (
+  <template data-card={r.slug} data-title={r.title}>
+    <Card r={r} closeHref={closeHref} />
+  </template>
+))}
+<dialog id="card-dialog" aria-label="Review"><div class="dialog-inner"></div></dialog>

@@ -1,0 +1,15 @@
+---
+import Grid from './Grid.astro';
+import { tierRows, type Review } from '../lib/reviews.ts';
+interface Props { reviews: Review[] }
+const rows = tierRows(Astro.props.reviews);
+const range = (min: number, max: number | null) => (max === null ? `${min}+` : min === 0 ? `below ${max}` : `${min}–${max}`);
+---
+<div class="tiers">
+  {rows.map((row, i) => (
+    <section class:list={['tier', row.tier]}>
+      <div class="tl">{row.tier}<small>{range(row.min, row.max)}</small></div>
+      {row.items.length ? <Grid reviews={row.items} eagerCount={i === 0 ? 6 : 0} /> : <div class="empty">—</div>}
+    </section>
+  ))}
+</div>
