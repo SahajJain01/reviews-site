@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup — reviews</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf9f7; --ink:#222; --ink2:#6a6a6a; --ink3:#9a9a9a; --line:#ebe8e3;
+  --tile:#f1eee9; --accent:#ff385c;
+  --shadow:rgba(0,0,0,.02) 0 0 0 1px, rgba(0,0,0,.04) 0 2px 6px, rgba(0,0,0,.1) 0 4px 8px;
+}
+*{box-sizing:border-box}
+html{scrollbar-gutter:stable}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.nosw .switch{display:none}
+.switch{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:30;background:#222;color:#fff;border-radius:999px;padding:6px;display:flex;gap:4px;box-shadow:0 8px 24px rgba(0,0,0,.2);font-size:13px}
+.switch button{all:unset;cursor:pointer;padding:8px 14px;border-radius:999px;font-weight:500}
+.switch button.on{background:#fff;color:#222}
+.switch .lbl{padding:8px 10px;opacity:.6}
+
+header{max-width:1240px;margin:0 auto;padding:36px 32px 0;display:flex;align-items:baseline;justify-content:space-between}
+.mark{font-weight:700;font-size:20px;letter-spacing:-.4px}
+.mark span{color:var(--ink3);font-weight:500}
+.count{font-size:13px;color:var(--ink2)}
+
+.pills{max-width:1240px;margin:0 auto;padding:22px 32px 8px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;position:sticky;top:0;background:var(--bg);z-index:5}
+.pill{all:unset;cursor:pointer;white-space:nowrap;padding:9px 16px;border-radius:999px;border:1px solid var(--line);font-size:14px;font-weight:500;color:var(--ink);background:#fff;transition:.15s}
+.pill:hover{border-color:#cfcac2}
+.pill.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.pill small{color:var(--ink3);font-weight:500;margin-left:4px}
+.pill.on small{color:#bbb}
+
+main{max-width:1240px;margin:0 auto;padding:18px 32px 120px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:36px 28px}
+.item{cursor:pointer;display:block}
+.frame{aspect-ratio:1;display:flex;align-items:center;justify-content:center;padding:14%;border-radius:20px;transition:transform .25s ease, background .25s}
+.frame img{max-width:100%;max-height:100%;object-fit:contain;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.item:hover .frame img{transform:translateY(-6px) scale(1.03)}
+.meta{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-top:10px;padding:0 4px}
+.name{font-size:15px;font-weight:600;letter-spacing:-.15px}
+.sub{font-size:13px;color:var(--ink2);margin-top:2px;padding:0 4px}
+.score{font-size:14px;font-weight:600;font-variant-numeric:tabular-nums}
+
+/* style variants */
+body.floating .frame{background:transparent}
+body.tiles .frame{background:var(--tile)}
+body.tinted .frame{background:var(--tint)}
+
+/* tier mode */
+.tier{display:grid;grid-template-columns:64px 1fr;gap:24px;padding:26px 0;border-top:1px solid var(--line)}
+.tier:first-child{border-top:0}
+.tl{font-size:44px;font-weight:700;letter-spacing:-1px;line-height:1;color:var(--ink)}
+.tl small{display:block;font-size:12px;font-weight:500;color:var(--ink3);letter-spacing:0;margin-top:6px}
+.tier.S .tl{color:var(--accent)}
+.tier .grid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+.empty{color:var(--ink3);font-size:14px;align-self:center}
+
+/* modal */
+.scrim{position:fixed;inset:0;background:rgba(34,34,34,.38);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:40;padding:24px}
+.scrim.open{display:flex;animation:fade .2s}
+@keyframes fade{from{opacity:0}}
+@keyframes pop{from{opacity:0;transform:translateY(16px) scale(.98)}}
+.card{background:#fff;border-radius:32px;box-shadow:0 24px 64px rgba(0,0,0,.22);width:min(980px,100%);max-height:calc(100vh - 48px);display:grid;grid-template-columns:1.05fr 1fr;overflow:hidden;animation:pop .28s cubic-bezier(.2,.8,.2,1)}
+.cimg{background:var(--tint);display:flex;align-items:center;justify-content:center;padding:56px;position:relative;min-height:440px}
+.cimg img{max-width:100%;max-height:420px;object-fit:contain;}
+.cbody{padding:44px 44px 36px;overflow:auto;display:flex;flex-direction:column}
+.ccat{font-size:13px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.6px}
+.ctitle{font-size:30px;font-weight:700;letter-spacing:-.7px;line-height:1.1;margin:8px 0 18px}
+.crow{display:flex;align-items:center;gap:14px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.big{font-size:44px;font-weight:700;letter-spacing:-1.5px;line-height:1}
+.big small{font-size:16px;color:var(--ink3);font-weight:500;letter-spacing:0}
+.tierchip{border-radius:10px;padding:6px 10px;font-weight:700;font-size:14px;background:#f2f2f2}
+.tierchip.S{background:var(--accent);color:#fff}
+.verdict{font-size:18px;font-weight:500;line-height:1.4;letter-spacing:-.2px;margin:22px 0 14px}
+.text{font-size:15px;line-height:1.65;color:#3f3f3f}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:26px}
+.fact{font-size:13px;padding:6px 12px;border-radius:999px;background:#f5f3ef;color:var(--ink2)}
+.close{position:absolute;top:18px;left:18px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.9);border:0;cursor:pointer;font-size:18px;box-shadow:var(--shadow)}
+.url{position:absolute;bottom:16px;left:20px;font-size:12px;color:rgba(0,0,0,.45);font-family:ui-monospace,monospace}
+@media (max-width:760px){
+  header,.pills,main{padding-left:18px;padding-right:18px}
+  .grid{grid-template-columns:repeat(2,1fr);gap:24px 14px}
+  .card{grid-template-columns:1fr;border-radius:28px}
+  .cimg{min-height:280px;padding:36px}.cimg img{max-height:240px}
+  .cbody{padding:26px}
+  .tier{grid-template-columns:1fr;gap:10px}
+}
+</style>
+</head>
+<body class="floating nosw">
+
+<header>
+  <div class="mark">sahaj <span>/ reviews</span></div>
+  <div class="count" id="count"></div>
+</header>
+<nav class="pills" id="pills"></nav>
+<main id="main"></main>
+
+<div class="scrim" id="scrim">
+  <div class="card" id="card" onclick="event.stopPropagation()"></div>
+</div>
+
+<div class="switch">
+  <span class="lbl">Grid style</span>
+  <button data-v="floating" class="on">A · Floating</button>
+  <button data-v="tiles">B · Tiles</button>
+  <button data-v="tinted">C · Tinted</button>
+</div>
+
+<script>
+const BASE="";
+const R=[
+ {s:'spicy-shrimp-ramyun',t:'Spicy Shrimp Ramyun',c:'Instant Noodles',sc:8.5,img:'p0',tint:'#f6e4df',b:'Nongshim',p:'28k₫',d:'2 Nov 2026',v:'Properly spicy, and the shrimp broth actually tastes of shrimp.',x:'The seasoning packet is generous enough that you can hold some back. Noodles keep their bite for a few minutes past the packet time, which is rare. I would buy this again over most of the shelf.'},
+ {s:'yuzu-sparkling',t:'Yuzu Sparkling Soda',c:'Bottled Drinks',sc:7.5,img:'p1',tint:'#f5f0d9',b:'Kōji Co.',p:'45k₫',d:'1 Nov 2026',v:'Bright, not too sweet. Gone in four sips.',x:'Good carbonation, real citrus peel bitterness at the end. Small bottle for the price.'},
+ {s:'dark-70',t:'70% Dark, Ben Tre Cacao',c:'Chocolate',sc:9.5,img:'p2',tint:'#efe6dc',b:'Marou',p:'95k₫',d:'30 Oct 2026',v:'Fruity, clean snap, nothing waxy about it.',x:'Red fruit up front, a little earthy finish. Melts slowly. This is the bar I would give someone to convert them to dark chocolate.'},
+ {s:'aged-comte',t:'Comté, 18 months',c:'Cheese',sc:9.0,img:'p3',tint:'#f4ecd8',b:'Fromagerie Arnaud',p:'210k₫ / 100g',d:'27 Oct 2026',v:'Crystals, brown butter, and it lasts.',x:'Nutty and long. A bit dry on day four after opening, so buy small.'},
+ {s:'oat-honey-soap',t:'Oat & Honey Bar',c:'Soap',sc:7.0,img:'p4',tint:'#f3efe6',b:'Local market',p:'60k₫',d:'24 Oct 2026',v:'Gentle and smells like breakfast. Dissolves fast.',x:'Lovely lather, no tightness after. Leave it on a dry dish or it turns to paste in a week.'},
+ {s:'cable-station',t:'Dual Cable Station',c:'Gym Machines',sc:8.0,img:'p5',tint:'#e9eaec',b:'Life Fitness',p:'',d:'20 Oct 2026',v:'Smooth pulleys, sensible handle storage.',x:'Weight stack steps are a bit coarse at the light end. Otherwise the best-feeling cable in the gym.'},
+ {s:'cup-noodle-classic',t:'Classic Cup Noodle',c:'Instant Noodles',sc:6.0,img:'p6',tint:'#f2ecea',b:'Nissin',p:'18k₫',d:'18 Oct 2026',v:'Comfort food. Not much else.',x:'Salty, a little flat, but it does the job at 1am.'},
+ {s:'green-tea-bottle',t:'Iced Green Tea',c:'Bottled Drinks',sc:5.0,img:'p7',tint:'#e6efdc',b:'Không Độ',p:'12k₫',d:'15 Oct 2026',v:'Sweeter than it looks. Fine ice-cold.',x:'Leans syrupy. Would pick the unsweetened version if I could find it.'},
+];
+const TIERS=[['S',9],['A',8],['B',6.5],['C',5],['D',0]];
+const tierOf=s=>TIERS.find(([,m])=>s>=m)[0];
+const cats=['All',...[...new Set(R.map(r=>r.c))]];
+let cat='All';
+
+function itemHTML(r){return `<a class="item" onclick="openR('${r.s}')" style="--tint:${r.tint}">
+  <div class="frame"><img src="${BASE}${r.img}.webp" alt="${r.t}"></div>
+  <div class="meta"><div class="name">${r.t}</div><div class="score">${r.sc.toFixed(1)}</div></div>
+  <div class="sub">${r.c}</div></a>`}
+
+function render(){
+  document.getElementById('pills').innerHTML=cats.map(c=>{
+    const n=c==='All'?R.length:R.filter(r=>r.c===c).length;
+    return `<button class="pill ${c===cat?'on':''}" onclick="setCat('${c}')">${c}<small>${n}</small></button>`}).join('');
+  const m=document.getElementById('main');
+  document.getElementById('count').textContent=`${R.length} things, honestly scored`;
+  if(cat==='All'){m.innerHTML=`<div class="grid">${R.map(itemHTML).join('')}</div>`;return}
+  const list=R.filter(r=>r.c===cat).sort((a,b)=>b.sc-a.sc);
+  m.innerHTML=TIERS.map(([t,min],i)=>{
+    const rows=list.filter(r=>tierOf(r.sc)===t);
+    const range=i===0?`${min}+`:`${min}–${TIERS[i-1][1]}`;
+    return `<section class="tier ${t}"><div class="tl">${t}<small>${t==='D'?'below 5':range}</small></div>
+      ${rows.length?`<div class="grid">${rows.map(itemHTML).join('')}</div>`:'<div class="empty">—</div>'}</section>`}).join('');
+}
+function setCat(c){cat=c;render()}
+function openR(s){
+  const r=R.find(x=>x.s===s),t=tierOf(r.sc);
+  document.getElementById('card').innerHTML=`
+   <div class="cimg" style="--tint:${r.tint}">
+     <button class="close" onclick="closeR()">✕</button>
+     <img src="${BASE}${r.img}.webp" alt="${r.t}">
+     <div class="url">/r/${r.s}</div>
+   </div>
+   <div class="cbody">
+     <div class="ccat">${r.c}</div>
+     <div class="ctitle">${r.t}</div>
+     <div class="crow"><div class="big">${r.sc.toFixed(1)}<small> / 10</small></div><div class="tierchip ${t}">${t} tier</div></div>
+     <div class="verdict">“${r.v}”</div>
+     <div class="text">${r.x}</div>
+     <div class="facts">${[r.b,r.p,r.d].filter(Boolean).map(f=>`<span class="fact">${f}</span>`).join('')}</div>
+   </div>`;
+  document.getElementById('scrim').classList.add('open');{const h=document.documentElement,sw=innerWidth-h.clientWidth;h.style.overflow='hidden';h.style.paddingRight=(innerWidth-h.clientWidth-sw>0?sw:0)+'px';h.dataset.sw=sw;document.querySelector('.pills').style.paddingRight='';}
+}
+function closeR(){document.getElementById('scrim').classList.remove('open');document.documentElement.style.overflow='';document.documentElement.style.paddingRight=''}
+document.getElementById('scrim').onclick=closeR;
+document.addEventListener('keydown',e=>e.key==='Escape'&&closeR());
+document.querySelectorAll('.switch button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.switch button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  document.body.className=b.dataset.v;
+  if(window.brainstorm&&brainstorm.send)brainstorm.send({type:'click',choice:b.dataset.v,text:b.textContent});
+});
+render();
+{const h=new URLSearchParams(location.hash.slice(1));if(h.get('v'))document.body.className=h.get('v');if(h.get('cat'))setCat(h.get('cat'));if(h.get('open'))openR(h.get('open'));}
+</script>
+</body>
+</html>
