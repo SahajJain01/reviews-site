@@ -41,12 +41,13 @@ main { max-width: 1240px; margin: 0 auto; padding: 18px 32px 120px; }
 .score { font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .sub { font-size: 13px; color: var(--ink2); margin-top: 3px; padding: 0 4px; }
 
-.tier { display: grid; grid-template-columns: 72px 1fr; gap: 24px; padding: 26px 0; border-top: 1px solid var(--line); }
+.tier { display: grid; grid-template-columns: 72px 1fr; gap: 20px; padding: 14px 0; border-top: 1px solid var(--line); }
 .tier:first-child { border-top: 0; }
 .tl { font-size: 44px; font-weight: 700; line-height: 1; }
-.tl small { display: block; font-size: 12px; font-weight: 400; color: var(--ink2); margin-top: 6px; }
+.tl small { display: none; }
 .tier.S .tl { color: var(--accent); }
-.tier .grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+.tier .grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+.tier .meta, .tier .sub { display: none; }
 .empty { color: var(--ink3); font-size: 14px; align-self: center; }
 
 /* Card dialog */
@@ -85,8 +86,9 @@ main { max-width: 1240px; margin: 0 auto; padding: 18px 32px 120px; }
 @media (max-width: 760px) {
   .top, .pills, main { padding-left: 18px; padding-right: 18px; }
   .top { flex-direction: column; gap: 4px; padding-top: 24px; }
-  .grid, .tier .grid { grid-template-columns: repeat(2, 1fr); gap: 24px 14px; }
-  .tier { grid-template-columns: 1fr; gap: 10px; }
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 24px 14px; }
+  .tier .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .tier { grid-template-columns: 42px minmax(0, 1fr); gap: 10px; }
   #card-dialog { padding: 12px; align-items: flex-start; }
   .card { grid-template-columns: 1fr; border-radius: 28px; }
   .cimg { min-height: 280px; padding: 36px; }
