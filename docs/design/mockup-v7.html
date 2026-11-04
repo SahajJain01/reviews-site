@@ -6,7 +6,6 @@
 <title>Mockup — reviews</title>
 <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
 <style>
-@font-face{font-family:'Jackwrite';src:url('./jackwrite-thin.woff2') format('woff2');font-weight:100;font-display:swap}
 @font-face{font-family:'Jackwrite';src:url('./jackwrite-regular.woff2') format('woff2');font-weight:400;font-display:swap}
 @font-face{font-family:'Jackwrite';src:url('./jackwrite-bold.woff2') format('woff2');font-weight:700;font-display:swap}
 :root{
@@ -25,14 +24,14 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Jackwrite','Cou
 
 header{max-width:1240px;margin:0 auto;padding:36px 32px 0;display:flex;align-items:baseline;justify-content:space-between}
 .mark{font-weight:700;font-size:20px;}
-.mark span{color:var(--ink3);font-weight:100}
-.count{font-weight:100;font-size:13px;color:var(--ink)}
+.mark span{color:var(--ink3);font-weight:400}
+.count{font-weight:400;font-size:13px;color:var(--ink)}
 
 .pills{max-width:1240px;margin:0 auto;padding:22px 32px 8px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;position:sticky;top:0;background:var(--bg);z-index:5}
 .pill{all:unset;cursor:pointer;white-space:nowrap;padding:9px 16px;border-radius:999px;border:1px solid var(--line);font-size:14px;font-weight:400;color:var(--ink);background:#fff;transition:.15s}
 .pill:hover{border-color:#cfcac2}
 .pill.on{font-weight:700;background:var(--ink);border-color:var(--ink);color:#fff}
-.pill small{color:var(--ink3);font-weight:100;margin-left:4px}
+.pill small{color:var(--ink3);font-weight:400;margin-left:4px}
 .pill.on small{color:#bbb}
 
 main{max-width:1240px;margin:0 auto;padding:18px 32px 120px}
@@ -43,7 +42,7 @@ main{max-width:1240px;margin:0 auto;padding:18px 32px 120px}
 .item:hover .frame img{transform:translateY(-6px) scale(1.03)}
 .meta{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-top:10px;padding:0 4px}
 .name{font-size:14px;font-weight:700;}
-.sub{font-size:13px;font-weight:100;color:var(--ink2);margin-top:2px;padding:0 4px}
+.sub{font-size:13px;font-weight:400;color:var(--ink2);margin-top:2px;padding:0 4px}
 .score{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
 
 /* style variants */
@@ -55,7 +54,7 @@ body.tinted .frame{background:var(--tint)}
 .tier{display:grid;grid-template-columns:64px 1fr;gap:24px;padding:26px 0;border-top:1px solid var(--line)}
 .tier:first-child{border-top:0}
 .tl{font-size:44px;font-weight:700;line-height:1;color:var(--ink)}
-.tl small{display:block;font-size:12px;font-weight:100;color:var(--ink3);letter-spacing:0;margin-top:6px}
+.tl small{display:block;font-size:12px;font-weight:400;color:var(--ink3);letter-spacing:0;margin-top:6px}
 .tier.S .tl{color:var(--accent)}
 .tier .grid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
 .empty{color:var(--ink3);font-size:14px;align-self:center}
@@ -69,17 +68,17 @@ body.tinted .frame{background:var(--tint)}
 .cimg{background:var(--tint);display:flex;align-items:center;justify-content:center;padding:56px;position:relative;min-height:440px}
 .cimg img{max-width:100%;max-height:420px;object-fit:contain;}
 .cbody{padding:44px 44px 36px;overflow:auto;display:flex;flex-direction:column}
-.ccat{font-size:12px;font-weight:100;color:var(--ink);text-transform:uppercase;letter-spacing:.6px}
+.ccat{font-size:12px;font-weight:400;color:var(--ink);text-transform:uppercase;letter-spacing:.6px}
 .ctitle{font-size:28px;font-weight:700;line-height:1.1;margin:8px 0 18px}
 .crow{display:flex;align-items:center;gap:14px;padding-bottom:20px;border-bottom:1px solid var(--line)}
 .big{font-size:44px;font-weight:700;line-height:1}
-.big small{font-size:16px;color:var(--ink2);font-weight:100;letter-spacing:0}
+.big small{font-size:16px;color:var(--ink2);font-weight:400;letter-spacing:0}
 .tierchip{border-radius:10px;padding:6px 10px;font-weight:700;font-size:14px;background:#f2f2f2}
 .tierchip.S{background:var(--accent);color:#fff}
 .verdict{font-size:18px;font-weight:700;line-height:1.4;margin:22px 0 14px}
 .text{font-size:15px;font-weight:400;line-height:1.65;color:#3f3f3f}
 .facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:26px}
-.fact{font-size:13px;font-weight:100;padding:6px 12px;border-radius:999px;background:#f5f3ef;color:var(--ink)}
+.fact{font-size:13px;font-weight:400;padding:6px 12px;border-radius:999px;background:#f5f3ef;color:var(--ink)}
 .close{position:absolute;top:18px;left:18px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.9);border:0;cursor:pointer;font-size:18px;box-shadow:var(--shadow)}
 .url{position:absolute;bottom:16px;left:20px;font-size:12px;color:rgba(0,0,0,.45);font-family:ui-monospace,monospace}
 @media (max-width:760px){

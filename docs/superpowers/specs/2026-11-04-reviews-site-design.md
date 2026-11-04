@@ -204,11 +204,10 @@ The review body is free markdown below the front matter.
 - Opening the dialog locks page scroll and compensates for the scrollbar width, so nothing moves.
 - Verified in the mockup: the first pill stayed at x = 44.5 px across load, filter, open and close.
 
-**Visual system** (from approved mockup v6: mockup v3's layout with the Jackwrite font = style "A · Floating, no drop shadow")
-- **Font:** Jackwrite by Jack Daw (SIL Open Font License, free for commercial use; licence file shipped in `src/fonts/`). All three styles are self-hosted as WOFF2:
+**Visual system** (from approved mockup v7: mockup v3's layout with the Jackwrite font = style "A · Floating, no drop shadow")
+- **Font:** Jackwrite by Jack Daw (SIL Open Font License, free for commercial use; licence file shipped in `src/fonts/`). Two styles are self-hosted as WOFF2 (Thin is not used):
   - **Bold (700):** wordmark "sahaj", grid scores, tier letters, big card score, item titles, active pill, card title, verdict quote.
-  - **Regular (400):** pills, review body.
-  - **Thin (100):** secondary text (category under items, counts, "/ reviews", "/ 10", tier ranges, card category label, fact chips). Thin is very light, so thin text uses `#222`/`#6a6a6a`, never the tertiary grey.
+  - **Regular (400):** everything else: pills, review body, and secondary text (category under items, counts, "/ reviews", "/ 10", tier ranges, card category label, fact chips). Hierarchy for secondary text comes from size and colour (`#6a6a6a`/`#9a9a9a`), not weight.
   - **No negative letter-spacing.**
   - **Fallback stack:** `'Jackwrite', 'Courier Prime', ui-monospace, monospace`. Jackwrite only covers basic Latin (94 glyphs). Accented letters (é in "Comté"), ₫ € £, … and × fall back per glyph to Courier Prime. Vietnamese is not a requirement. UI chrome (the close button) uses ASCII or SVG only.
 - **Colours**
@@ -225,7 +224,7 @@ The review body is free markdown below the front matter.
 - **Non-cutout images** (`cutout: false`) sit in the same square frame as a rounded rectangle (16 px radius), filled with `object-fit: cover`.
 - **Header:** `sahaj / reviews` wordmark left, "N things, honestly scored" right. Pills are sticky under the header and scroll sideways on mobile.
 - **Card:** 32 px radius, a single soft shadow on the card only, blurred backdrop.
-- **Reference mockup:** `docs/design/mockup-v6.html` (mockup-v3 is the pre-font version) (copied into the repo with its sample images).
+- **Reference mockup:** `docs/design/mockup-v7.html` (mockup-v3 is the pre-font version) (copied into the repo with its sample images).
 
 **Meta:** each `/r/` page has a title, description (the verdict) and `og:image` (the cutout). Sitemap via `@astrojs/sitemap`.
 
