@@ -40,7 +40,7 @@ Why: writing a review should take as long as writing a note. Everything after
 
 ## 3. Constraints
 
-- Static site: **Astro**, hosted on **Cloudflare Pages**, at **reviews.sahajjain.com**. The `sahajjain.com` zone is already on Cloudflare.
+- Static site: **Astro**, hosted on **Cloudflare Pages**, at **bebi.fyi**. The `bebi.fyi` zone (bought on Cloudflare Registrar) serves the site at the root domain.
 - Writing happens on an Android phone with Obsidian + the Obsidian Git community plugin.
 - The site repo is public, so GitHub Actions minutes are unlimited and free. The vault repo is private.
 - Background removal runs on a standard GitHub-hosted Ubuntu runner (CPU only). A local spike measured ~13 s per photo for `birefnet-general-lite` on CPU. The model is 224 MB and is cached between runs.
@@ -59,29 +59,33 @@ Sahaj picked **A**.
 ## 5. Architecture
 
 ```
-phone (Obsidian + Obsidian Git)
+phone / PC (Obsidian + Obsidian Git)
    │ push
    ▼
 github.com/SahajJain01/reviews-vault   (private)
-   │ workflow "notify": repository_dispatch → reviews-site
+   │ .github/workflows/publish.yml  →  uses: SahajJain01/reviews-site/.github/workflows/publish.yml@main
    ▼
-github.com/SahajJain01/reviews-site    (public)  workflow "publish"
-   1. checkout site + checkout vault into ./vault (read-only token)
-   2. validate notes (fail on errors)
-   3. cutout step: new photos → transparent PNG + manifest entry
+reusable workflow "publish" (defined in reviews-site, public)
+   1. checkout vault + site
+   2. prepare: validate notes (fail on errors), list photos needing cutouts
+   3. cutout step (only when something is pending)
    4. astro build
-   5. wrangler pages deploy → Cloudflare Pages project "reviews"
-   6. commit new cutouts back to reviews-site ("[skip ci]"), only after the deploy succeeds
+   5. wrangler pages deploy → Cloudflare Pages project "bebi"
+   6. commit new cutouts back to reviews-site ("[skip ci]")
    ▼
-reviews.sahajjain.com
+bebi.fyi
 ```
 
-- **Triggers for `publish`:** `repository_dispatch` (type `vault-updated`), `push` to `main` on reviews-site (code changes), and `workflow_dispatch` (manual).
-- **Concurrency:** one `publish` run at a time (`concurrency: publish`, `cancel-in-progress: false`), so two quick pushes can't race on cutout commits.
+- **Implementation change from the original design** (agent's call; the design is the same, only the wiring differs): fine-grained PATs can't be created from the CLI. So instead of a `repository_dispatch` sent with a PAT, the vault repo *calls the site repo's reusable workflow*. The site repo is public, so any repo can call it.
+  - **Run from the vault:** the vault's own `GITHUB_TOKEN` reads the vault. A write deploy key on reviews-site (`SITE_DEPLOY_KEY`) checks out the site and pushes cutouts.
+  - **Run from the site** (push to `main` or a manual run): a read-only deploy key on reviews-vault (`VAULT_DEPLOY_KEY`) checks out the vault, and the site's `GITHUB_TOKEN` (contents: write) pushes cutouts.
 - **Secrets**
-  - In reviews-vault: `SITE_DISPATCH_TOKEN`, a fine-grained PAT that can trigger dispatches on reviews-site.
-  - In reviews-site: `VAULT_READ_TOKEN` (fine-grained, contents:read on reviews-vault), `CLOUDFLARE_API_TOKEN` (Pages:edit), `CLOUDFLARE_ACCOUNT_ID`, and `CF_ANALYTICS_TOKEN` (the Web Analytics beacon token; public, but kept in config).
-- **Failure behaviour:** any validation, cutout or build error fails the run before deploy. The live site is untouched, and GitHub emails Sahaj about the failed run. The run's job summary lists each problem with the note's file path and the field that's wrong.
+  - **In both repos:** `CLOUDFLARE_API_TOKEN` (a dedicated token scoped to Account › Cloudflare Pages: Edit) and `CLOUDFLARE_ACCOUNT_ID`.
+  - **reviews-vault only:** `SITE_DEPLOY_KEY`.
+  - **reviews-site only:** `VAULT_DEPLOY_KEY`.
+- **Analytics:** Cloudflare Web Analytics with automatic injection on the proxied `bebi.fyi` hostname, so there's no beacon token in code.
+- **Concurrency:** one publish run at a time per repo (`concurrency: publish`, `cancel-in-progress: false`). The cutout push rebases and retries once if `main` has moved.
+- **Failure behaviour:** any validation, cutout or build error fails the run before deploy. The live site is untouched, and GitHub emails Sahaj about the failed run. The job summary lists each problem with the note's file path and the field that's wrong.
 
 ## 6. Vault layout and authoring
 
@@ -246,7 +250,7 @@ The review body is free markdown below the front matter.
   - `dist/` has `/`, one `/c/` page per category and one `/r/` page per review
   - every `<img>` resolves
   - `categories.json` exists
-- **Manual check before calling v1 done:** the real phone flow end to end. Write a note, attach a photo, push, then see it live on reviews.sahajjain.com within a few minutes.
+- **Manual check before calling v1 done:** the real phone flow end to end. Write a note, attach a photo, push, then see it live on bebi.fyi within a few minutes.
 
 ## 11. Later (designed for, not built)
 
